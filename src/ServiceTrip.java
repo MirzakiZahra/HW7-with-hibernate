@@ -43,5 +43,6 @@ public class ServiceTrip {
         session.close();
         return passengers;
     }
+    public void find
 
 }
