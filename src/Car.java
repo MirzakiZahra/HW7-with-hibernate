@@ -1,3 +1,6 @@
+import javax.persistence.Entity;
+
+@Entity
 public class Car {
     private String  name_of_car;
     private int plaque;

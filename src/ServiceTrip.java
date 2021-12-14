@@ -8,9 +8,9 @@ public class ServiceTrip {
     static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
     public void addTrip(int idDriver, int idPassenger) {
-       Driver driver= findDriverById(idDriver);
-      Passengers passengers=  findPassengerById(idPassenger);
-        Trip trip=new Trip(passengers, driver);
+        Driver driver = findDriverById(idDriver);
+        Passengers passengers = findPassengerById(idPassenger);
+        Trip trip = new Trip(passengers, driver);
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(trip);
@@ -43,6 +43,36 @@ public class ServiceTrip {
         session.close();
         return passengers;
     }
-    public void find
+
+    public void findTripDestinationLength(int userName, int idDriver) {
+        Driver driver = findDriverById(idDriver);
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "select destinationLength from trip where driverId = '" + idDriver +
+                "' and " +
+                "tripStatue = '" + "on" + "'";
+        SQLQuery query = session.createSQLQuery(sql);
+        session.close();
+    }
+
+    public void findTripDestinationWidth(int userName, int idDriver) {
+        Driver driver = findDriverById(idDriver);
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "select destinationWidth from trip where driverId = '" + idDriver +
+                "' and " +
+                "tripStatue = '" + "on" + "'";
+        SQLQuery query = session.createSQLQuery(sql);
+        session.close();
+    }
+    public void changestatue(int idDriver){
+        Driver driver = findDriverById(idDriver);
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+
+    }
+
+
 
 }
