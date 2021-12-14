@@ -1,12 +1,29 @@
+import javax.persistence.*;
+
+@Entity
 public class Trip {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     boolean trip;
     int destinationLength;
     int destinationWidth;
+    @ManyToOne
     Passengers passengers;
+    @ManyToOne
     Driver driver;
     int originalLength;
     int origenWidth;
     PaymentType paymentType;
+
+    public Trip() {
+    }
+
+    public Trip(Passengers passengers, Driver driver) {
+        this.passengers = passengers;
+        this.driver = driver;
+    }
+
     private Trip_status tripStatus;
 
     public Trip_status getTripStatus() {
