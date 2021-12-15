@@ -42,7 +42,7 @@ public class ServiceDriver {
         List<Driver> driverList = query.list();
         driverList.stream().forEach(i-> System.out.println(i));
     }
-    public Driver getStatus(int username) {
+    public String getStatus(int username) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
             String sql = "select tripStatue from driver where username= :username";
@@ -50,9 +50,9 @@ public class ServiceDriver {
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(Driver.class);
         query.setParameter("username", username);
-        Driver driver = (Driver) query.list().get(0);
+        String tripStatue = (String) query.list().get(0);
         session.close();
-        return driver;
+        return tripStatue;
 
     }
     public void changeStatue() {
