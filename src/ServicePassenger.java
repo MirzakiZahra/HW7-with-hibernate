@@ -8,8 +8,7 @@ public class ServicePassenger {
     ServiceTrip serviceTrip = new ServiceTrip();
     static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
-    public void addPassenger(int id) {
-        Passengers passengers = serviceTrip.findPassengerById(id);
+    public void addPassenger(Passengers passengers) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(passengers);
@@ -18,21 +17,27 @@ public class ServicePassenger {
 
 
     }
-    public void checkExit(int id){
+
+    public int checkExitOfPassenger(int username) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "select * from passengers where id = :id";
+        String sql = "select * from passengers where username = :username";
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(Passengers.class);
-        query.setParameter("id", id);
-      Passengers passengers = (Passengers) query.list().get(0);
+        query.setParameter("username", username);
+        int output = (Integer) query.list().size();
         session.close();
+        return output;
     }
-    public void increaseBalance(int id, int fee) {
-       Passengers passengers = serviceTrip.findPassengerById(id);
+
+    public void increaseBalance(int username, int fee) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        passengers = session.load(Passengers.class, passengers.getId());
+        String sql = "select * from passengers where username = :username";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Passengers.class);
+        query.setParameter("username", username);
+        Passengers passengers = (Passengers) query.list().get(0);
         int temp = passengers.getBalance() + fee;
         passengers.setBalance(temp);
         session.update(passengers);
@@ -41,11 +46,15 @@ public class ServicePassenger {
 
 
     }
-    public void decreaseBalance(int id, int fee) {
-        Passengers passengers = serviceTrip.findPassengerById(id);
+
+    public void decreaseBalance(int username, int fee) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        passengers = session.load(Passengers.class, passengers.getId());
+        String sql = "select * from passengers where username = :username";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Passengers.class);
+        query.setParameter("username", username);
+        Passengers passengers = (Passengers) query.list().get(0);
         int temp = passengers.getBalance() - fee;
         passengers.setBalance(temp);
         session.update(passengers);
@@ -53,5 +62,16 @@ public class ServicePassenger {
         session.close();
 
 
+    }
+    public int findBalane(int username){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "select * from passengers where username = :username";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Driver.class);
+        query.setParameter("username", username);
+       Passengers passengers = (Passengers) query.list().get(0);
+       int temp= passengers.getBalance();
+       return temp;
     }
 }
