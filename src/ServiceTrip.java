@@ -7,10 +7,7 @@ import org.hibernate.cfg.Configuration;
 public class ServiceTrip {
     static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
-    public void addTrip(int idDriver, int idPassenger) {
-        Driver driver = findDriverById(idDriver);
-        Passengers passengers = findPassengerById(idPassenger);
-        Trip trip = new Trip(passengers, driver);
+    public void addTrip(Trip trip) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(trip);
@@ -44,22 +41,26 @@ public class ServiceTrip {
         return passengers;
     }
 
-    public void findTripDestinationLength(int userName, int idDriver) {
-        Driver driver = findDriverById(idDriver);
+    public int findTripDestinationLength(int userName) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "select destinationLength from trip where driverId = '" + idDriver +
-                "' and " +
-                "tripStatue = '" + "on" + "'";
+        String sql = "select id from driver where username = '" + userName + "'";
         SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Trip.class);
+        int idDriver=(Integer) query.list().get(0);
+        sql = "select destinationLength from trip where driverId = '" + idDriver + "' and " +
+                "tripStatue = '"+"on"+"'";
+         query = session.createSQLQuery(sql);
+        query.addEntity(Trip.class);
+        int destinationLenghth=(Integer) query.list().get(0);
         session.close();
+        return destinationLenghth;
     }
 
-    public void findTripDestinationWidth(int userName, int idDriver) {
-        Driver driver = findDriverById(idDriver);
+    public void findTripDestinationWidth(int userName) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "select destinationWidth from trip where driverId = '" + idDriver +
+        String sql = "select destinationWidth from trip where username = '" + userName +
                 "' and " +
                 "tripStatue = '" + "on" + "'";
         SQLQuery query = session.createSQLQuery(sql);
@@ -71,6 +72,9 @@ public class ServiceTrip {
         Transaction transaction = session.beginTransaction();
 
 
+    }
+    public void close(){
+        sessionFactory.close();
     }
 
 
