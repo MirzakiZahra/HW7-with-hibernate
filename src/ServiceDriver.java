@@ -77,17 +77,21 @@ public class ServiceDriver {
         session.close();
     }
 
-}
 
-    public void increase(int id, int fee) {
-        Driver driver = serviceTrip.findDriverById(id);
+
+    public void increase(int username, int fee) {
+
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        driver = session.load(Driver.class, driver.getId());
-        int temp = driver.getBalance() + fee;
-        driver.setBalance(temp);
-        session.update(driver);
-        transaction.commit();
+        String sql = "select * from driver where username = :username";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Driver.class);
+        query.setParameter("username", username);
+       Driver driver = (Driver) query.list().get(0);
+       int temp= driver.getBalance()+fee;
+       driver.setBalance(temp);
+       session.update(driver);
+       transaction.commit();
         session.close();
 
 
