@@ -7,6 +7,7 @@ import org.hibernate.cfg.Configuration;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class ServiceDriver {
     ServiceTrip serviceTrip = new ServiceTrip();
@@ -21,7 +22,7 @@ public class ServiceDriver {
 
 
     }
-    public int checkExit(int username){
+    public int checkExitOfDriver(int username){
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         String sql = "select * from driver where username = :username";
@@ -31,6 +32,15 @@ public class ServiceDriver {
         int output = (Integer) query.list().size();
         session.close();
         return output;
+    }
+    public void showDriver(){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "select * from driver ";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Driver.class);
+        List<Driver> driverList = query.list();
+        driverList.stream().forEach(i-> System.out.println(i));
     }
     public Driver getStatus(int username) {
         Session session = sessionFactory.openSession();
