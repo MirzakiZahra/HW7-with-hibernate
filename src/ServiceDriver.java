@@ -22,30 +22,33 @@ public class ServiceDriver {
 
 
     }
-    public int checkExitOfDriver(int username){
+
+    public int checkExitOfDriver(int username) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         String sql = "select * from driver where username = :username";
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(Driver.class);
-        query.setParameter("username",username);
+        query.setParameter("username", username);
         int output = (Integer) query.list().size();
         session.close();
         return output;
     }
-    public void showDriver(){
+
+    public void showDriver() {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         String sql = "select * from driver ";
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(Driver.class);
         List<Driver> driverList = query.list();
-        driverList.stream().forEach(i-> System.out.println(i));
+        driverList.stream().forEach(i -> System.out.println(i));
     }
+
     public String getStatus(int username) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-            String sql = "select tripStatue from driver where username= :username";
+        String sql = "select tripStatue from driver where username= :username";
 
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(Driver.class);
@@ -55,12 +58,30 @@ public class ServiceDriver {
         return tripStatue;
 
     }
-    public void changeStatue() {
-        ;
+
+    public void changeStatue(int username) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "select driver where username = :username";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Driver.class);
+        query.setParameter("username", username);
+        Driver driver = (Driver) query.list().get(0);
+        if (this.getStatus(username) == "on") {
+            driver.setTripStatue(Trip_status.OFFTRIP);
+        } else {
+            driver.setTripStatue(Trip_status.ONTRIP);
+        }
+        session.update(driver);
+        transaction.commit();
+        session.close();
     }
+
+}
+
     public void increase(int id, int fee) {
-       Driver driver = serviceTrip.findDriverById(id);
-       Session session = sessionFactory.openSession();
+        Driver driver = serviceTrip.findDriverById(id);
+        Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         driver = session.load(Driver.class, driver.getId());
         int temp = driver.getBalance() + fee;
