@@ -1,9 +1,19 @@
+import javax.persistence.*;
 import java.sql.SQLException;
+@Entity
 
 public class Passengers extends Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    public int getId() {
+        return id;
+    }
 
     private int password;
     int balance=0;
+    @ManyToMany
     Driver driver= new Driver();
     Trip_status trip_status;
    // boolean trip;
