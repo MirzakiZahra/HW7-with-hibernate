@@ -12,8 +12,7 @@ public class ServiceDriver {
     ServiceTrip serviceTrip = new ServiceTrip();
     static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 
-    public void addDriver(int id) {
-        Driver driver = serviceTrip.findDriverById(id);
+    public void addDriver(Driver driver) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         session.save(driver);
@@ -22,15 +21,16 @@ public class ServiceDriver {
 
 
     }
-    public void checkExit(int id){
+    public int checkExit(int username){
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "select * from driver where id = :id";
+        String sql = "select * from driver where username = :username";
         SQLQuery query = session.createSQLQuery(sql);
         query.addEntity(Driver.class);
-        query.setParameter("id", id);
-        Driver driver = (Driver) query.list().get(0);
+        query.setParameter("username",username);
+        int output = (Integer) query.list().size();
         session.close();
+        return output;
     }
     public Driver getStatus(int username) {
         Session session = sessionFactory.openSession();
