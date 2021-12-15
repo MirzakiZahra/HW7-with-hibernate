@@ -1,5 +1,6 @@
 import javax.persistence.*;
 import java.sql.SQLException;
+
 @Entity
 
 public class Passengers extends Person {
@@ -12,11 +13,12 @@ public class Passengers extends Person {
     }
 
     private int password;
-    int balance=0;
+    int balance = 0;
+
     @ManyToMany
-    Driver driver= new Driver();
+    Driver driver = new Driver();
     Trip_status trip_status;
-   // boolean trip;
+    // boolean trip;
 
     public Trip_status getTrip_status() {
         return trip_status;
@@ -29,7 +31,8 @@ public class Passengers extends Person {
     public Driver getDriver() {
         return driver;
     }
-    public Passengers(){
+
+    public Passengers() {
 
     }
 
@@ -70,15 +73,15 @@ public class Passengers extends Person {
         this.password = password;
     }
 
-    public void increase_balance(int fund){
-        int temp=this.getBalance()+fund;
+    public void increase_balance(int fund) {
+        int temp = this.getBalance() + fund;
         this.setBalance(temp);
 
 
-
     }
-    public Trip requestCash(Trip trip, int destinationLength,int destinationWidth,
-                            int originLength, int originWidth){
+
+    public Trip requestCash(Trip trip, int destinationLength, int destinationWidth,
+                            int originLength, int originWidth) {
         trip.setDestinationLength(destinationLength);
         trip.setDestinationWidth(destinationWidth);
         trip.setOriginalLength(originLength);
@@ -87,25 +90,27 @@ public class Passengers extends Person {
         return trip;
 
     }
-    public Trip requestOnline(Trip trip, int destinationLength,int destinationWidth,
-                                 int originLength, int originWidth, DB_passenger db_passenger,
+
+    public Trip requestOnline(Trip trip, int destinationLength, int destinationWidth,
+                              int originLength, int originWidth, DB_passenger db_passenger,
                               int username) throws SQLException {
         trip.setDestinationLength(destinationLength);
         trip.setDestinationWidth(destinationWidth);
         trip.setOriginalLength(originLength);
         trip.setOrigenWidth(originWidth);
-        if (db_passenger.findBalance(username)>= trip.calculateCost()){
+        if (db_passenger.findBalance(username) >= trip.calculateCost()) {
             trip.setPassengers(this);
             this.decrease(trip.calculateCost());
-        }else {
+        } else {
             System.out.println("Please Increase your Balance");
         }
         return trip;
 
 
     }
-    public void decrease(int fund){
-        int number = this .balance-fund;
+
+    public void decrease(int fund) {
+        int number = this.balance - fund;
         this.setBalance(number);
     }
 

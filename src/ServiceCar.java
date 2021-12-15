@@ -13,6 +13,7 @@ public class ServiceCar {
         session.save(car);
         transaction.commit();
         session.close();
+        sessionFactory.close();
 
 
     }

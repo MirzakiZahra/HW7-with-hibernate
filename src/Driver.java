@@ -1,7 +1,6 @@
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+@Entity
 public class Driver extends Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -10,6 +9,7 @@ public class Driver extends Person {
     public int getId() {
         return id;
     }
+    @OneToOne
     Car car = new Car();
     private int balance;
     private Trip_status tripStatue;
