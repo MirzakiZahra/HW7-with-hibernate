@@ -57,21 +57,37 @@ public class ServiceTrip {
         return destinationLenghth;
     }
 
-    public void findTripDestinationWidth(int userName) {
+    public int findTripDestinationWidth(int userName) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        String sql = "select destinationWidth from trip where username = '" + userName +
-                "' and " +
-                "tripStatue = '" + "on" + "'";
+        String sql = "select id from driver where username = '" + userName + "'";
         SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Trip.class);
+        int idDriver=(Integer) query.list().get(0);
+        sql = "select destinationWidth from trip where driverId = '" + idDriver + "' and " +
+                "tripStatue = '"+"on"+"'";
+        query = session.createSQLQuery(sql);
+        query.addEntity(Trip.class);
+        int destinationWidth=(Integer) query.list().get(0);
         session.close();
+        return destinationWidth;
     }
-    public void changestatue(int idDriver){
-        Driver driver = findDriverById(idDriver);
+    public void changestatue(int userName){
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-
-
+        String sql = "select id from driver where username = '" + userName + "'";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Trip.class);
+        int idDriver=(Integer) query.list().get(0);
+        sql = "select * from trip where driverId = '" + idDriver + "' and " +
+                "tripStatue = '"+"on"+"'";
+        query = session.createSQLQuery(sql);
+        query.addEntity(Trip.class);
+        Trip trip=(Trip) query.list().get(0);
+        trip.setTripStatus(Trip_status.OFFTRIP);
+        session.update(trip);
+        transaction.commit();
+        session.close();
     }
     public void close(){
         sessionFactory.close();
