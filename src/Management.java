@@ -51,18 +51,20 @@ public class Management {
         }
         return null;
     }
-    public void finishTrip(Driver driver, int width, int length, DB_driver db_driver,
-                           DB_trip db_trip, int username, DB_passenger db_passenger) throws SQLException {
+    public void finishTrip(Driver driver, int width, int length, ServiceDriver serviceDriver,
+                           ServiceTrip serviceTrip, int username,
+                          ServicePassenger servicePassenger) throws SQLException {
         Passengers passenger = new Passengers();
-        width=db_trip.findTripDestinationWidth(username);
-        length=db_trip.findTripDestinationLength(username);
+        width=serviceTrip.findTripDestinationWidth(username);
+        length=serviceTrip.findTripDestinationLength(username);
         driver.setWidth(width);
         driver.setLength(length);
         driver.setTripStatue(Trip_status.OFFTRIP);
         passenger = this.findPassenger(driver.getUsername());
         passenger.setTrip_status(Trip_status.OFFTRIP);
-        db_driver.changeStatus(username);
-        db_driver.changeDestination(length,width,username);
-        db_trip.changeStatue(username);
+        serviceDriver.changeStatue(username);
+       serviceDriver.changeDestination(length,width,username);
+        serviceTrip.changestatue(username);
+       
     }
 }

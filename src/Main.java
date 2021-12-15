@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        DB_driver db_driver = new DB_driver();
-        DB_passenger db_passenger = new DB_passenger();
-        DB_trip db_trip = new DB_trip();
+        ServiceDriver serviceDriver=new ServiceDriver();
+       ServicePassenger servicePassenger=new ServicePassenger();
+       ServiceTrip serviceTrip= new ServiceTrip();
         Management management = new Management();
         Driver driver = new Driver();
         Trip trip = new Trip();
@@ -21,7 +21,7 @@ public class Main {
         while (check == true) {
             try {
                 Scanner scanner = new Scanner(System.in);
-                Database database = new Database();
+               // Database database = new Database();
                 int input = 0;
                 do {
                     System.out.println("1.Add  a group of drivers\n2.add a group of passengers\n" +
@@ -108,7 +108,7 @@ public class Main {
                                 driver.getCar().setColor_of_car(color_of_car);
                                 driver.setWidth(width);
                                 driver.setLength(length);
-                                db_driver.add_driver(driver);
+                                serviceDriver.addDriver(driver);
                                 management.drivers.add(driver);
                                 check = false;
                             }
@@ -184,7 +184,7 @@ public class Main {
                                 passengers.setUsername(username);
                                 passengers.setPassword(password);
                                 passengers.setBalance(balance);
-                                db_passenger.add_passenger(passengers);
+                                servicePassenger.addPassenger(passengers);
                                 passengers.setLength(length);
                                 passengers.setWidth(width);
                                 management.passengers.add(passengers);
@@ -206,7 +206,7 @@ public class Main {
                             }
                             int register;
                             driver = new Driver();
-                            int existance = db_driver.check_exist_driver(username);
+                            int existance = serviceDriver.checkExitOfDriver(username);
                             if (existance == 0) {
                                 System.out.println("1.register\n2.Exit");
                                 if (!scanner.hasNextInt()) {
@@ -275,14 +275,14 @@ public class Main {
                                     driver.setLength(length);
                                     driver.setWidth(width);
                                     management.drivers.add(driver);
-                                    db_driver.add_driver(driver);
+                                    serviceDriver.addDriver(driver);
                                     check = false;
                                 }
                                 if (register == 2) {
                                     break;
                                 }
                             } else {
-                                String status = db_driver.getStatus(username);
+                                String status = serviceDriver.getStatus(username);
                                 if (status.toLowerCase().charAt(0) == 'o') {
                                     driver = management.findDriver(username);
                                     boolean getMoney = false;
@@ -297,14 +297,14 @@ public class Main {
                                             case 2:
                                                 if (driver.getPaymentType().getAbbr().equalsIgnoreCase("c")) {
                                                     if (getMoney == true) {
-                                                        management.finishTrip(driver, width, length, db_driver, db_trip,
-                                                                username, db_passenger);
+                                                        management.finishTrip(driver, width, length, serviceDriver, serviceTrip,
+                                                                username, servicePassenger);
                                                     } else {
                                                         System.out.println("Please Accept that you recieve money first");
                                                     }
                                                 } else {
-                                                    management.finishTrip(driver, width, length, db_driver, db_trip,
-                                                            username, db_passenger);
+                                                    management.finishTrip(driver, width, length,serviceDriver,serviceTrip,
+                                                            username, servicePassenger);
                                                 }
                                                 break;
                                             case 3:
@@ -328,7 +328,8 @@ public class Main {
                             }
 
                             Passengers passengers = new Passengers();
-                            existance = db_passenger.check_exist_of_user(username);
+                            existance = servicePassenger.checkExitOfPassenger(username);
+
                             if (existance == 0) {
                                 System.out.println("name,age,address,username,password,balance,width,length");
                                 name = scanner.next();
@@ -390,7 +391,7 @@ public class Main {
                                 passengers.setBalance(balance);
                                 passengers.setLength(length);
                                 passengers.setWidth(width);
-                                db_passenger.add_passenger(passengers);
+                                servicePassenger.addPassenger(passengers);
                                 management.passengers.add(passengers);
                                 check = false;
                             } else {
@@ -424,11 +425,11 @@ public class Main {
                                             passengers.setDriver(driver);
                                             driver.setTripStatue(Trip_status.ONTRIP);
                                             driver.setPaymentType(PaymentType.CASH);
-                                            db_driver.changeStatus(passengers.getDriver().getUsername());
+                                           serviceDriver.changeStatue(passengers.getDriver().getUsername());
                                             trip.setDriver(driver);
                                             trip.setPaymentType(PaymentType.CASH);
                                             trip.setTripStatus(Trip_status.ONTRIP);
-                                            db_trip.addTrip(trip);
+                                            serviceTrip.addTrip(trip);
                                             System.out.println(" your request is successfully added ");
                                             break;
                                         case 2:
@@ -441,19 +442,19 @@ public class Main {
                                             DestinationLength = scanner.nextInt();
                                             passengers = management.findPassengerByUsername(username);
                                             trip = passengers.requestOnline(trip, DestinationLength, destinationWidth,
-                                                    originLength, originWidth, db_passenger, username);
+                                                    originLength, originWidth, servicePassenger, username);
                                             trip.setPassengers(passengers);
                                             driver = management.minDistance(originWidth, originLength);
                                             passengers.setDriver(driver);
                                             driver.setTripStatue(Trip_status.ONTRIP);
                                             driver.setPaymentType(PaymentType.ONLINE);
-                                            db_driver.changeStatus(passengers.getDriver().getUsername());
+                                            serviceDriver.changeStatue(passengers.getDriver().getUsername());
                                             trip.setDriver(driver);
                                             trip.setPaymentType(PaymentType.ONLINE);
                                             trip.setTripStatus(Trip_status.ONTRIP);
-                                            db_trip.addTrip(trip);
-                                            db_passenger.decreaseBalance(username, trip.calculateCost());
-                                            db_driver.increase(driver.getUsername(), trip.calculateCost());
+                                            serviceTrip.addTrip(trip);
+                                            servicePassenger.decreaseBalance(username,trip.calculateCost());
+                                            serviceDriver.increase(driver.getUsername(), trip.calculateCost());
                                             System.out.println(" your request is successfully added ");
                                             break;
 
@@ -468,7 +469,7 @@ public class Main {
                                                 fund = scanner.nextInt();
                                                 check = false;
                                             }
-                                            db_passenger.increase_balance(username, fund);
+                                            servicePassenger.increaseBalance(username,fund);
                                             break;
                                         case 4:
                                             break;
@@ -479,10 +480,10 @@ public class Main {
                             }
                             break;
                         case 5:
-                            db_driver.show_driver();
+                            serviceDriver.showDriver();
                             break;
                         case 6:
-                            db_passenger.show_passenger();
+                            servicePassenger.showPassenger();
                             break;
                         case 7:
                             break;

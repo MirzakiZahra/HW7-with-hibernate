@@ -4,6 +4,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
+
 public class ServicePassenger {
     ServiceTrip serviceTrip = new ServiceTrip();
     static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
@@ -73,5 +75,14 @@ public class ServicePassenger {
        Passengers passengers = (Passengers) query.list().get(0);
        int temp= passengers.getBalance();
        return temp;
+    }
+    public void showPassenger() {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "select * from passengers ";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Passengers.class);
+        List<Passengers> passengers = query.list();
+        passengers.stream().forEach(i -> System.out.println(i));
     }
 }
