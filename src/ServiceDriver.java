@@ -96,4 +96,18 @@ public class ServiceDriver {
 
 
     }
+    public void changeDestination(int username,int length, int width){
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        String sql = "select * from driver where username = :username";
+        SQLQuery query = session.createSQLQuery(sql);
+        query.addEntity(Driver.class);
+        query.setParameter("username", username);
+        Driver driver = (Driver) query.list().get(0);
+        driver.setWidth(width);
+        driver.setLength(length);
+        session.update(driver);
+        transaction.commit();
+        session.close();
+    }
 }
