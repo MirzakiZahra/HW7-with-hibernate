@@ -3,15 +3,16 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
 public class ServiceDriver {
+    static SessionFactory sessionFactory = new Configuration().
+            configure().buildSessionFactory();
     ServiceTrip serviceTrip = new ServiceTrip();
-    static SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+
 
     public void addDriver(Driver driver) {
         Session session = sessionFactory.openSession();

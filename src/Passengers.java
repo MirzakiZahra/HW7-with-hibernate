@@ -15,7 +15,7 @@ public class Passengers extends Person {
     private int password;
     int balance = 0;
 
-    @ManyToMany
+    @OneToOne(cascade = CascadeType.ALL,fetch =FetchType.LAZY)
     Driver driver = new Driver();
     Trip_status trip_status;
     // boolean trip;
@@ -92,13 +92,13 @@ public class Passengers extends Person {
     }
 
     public Trip requestOnline(Trip trip, int destinationLength, int destinationWidth,
-                              int originLength, int originWidth, DB_passenger db_passenger,
+                              int originLength, int originWidth, ServicePassenger servicePassenger,
                               int username) throws SQLException {
         trip.setDestinationLength(destinationLength);
         trip.setDestinationWidth(destinationWidth);
         trip.setOriginalLength(originLength);
         trip.setOrigenWidth(originWidth);
-        if (db_passenger.findBalance(username) >= trip.calculateCost()) {
+        if (servicePassenger.findBalane(username) >= trip.calculateCost()) {
             trip.setPassengers(this);
             this.decrease(trip.calculateCost());
         } else {

@@ -19,6 +19,7 @@
         <mapping class="Passengers"/>
         <mapping class="Car"/>
         <mapping class="Driver"/>
+        <mapping class="Person"/>
 
     </session-factory>
 </hibernate-configuration>

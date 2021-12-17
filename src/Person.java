@@ -1,4 +1,9 @@
+import javax.persistence.*;
+
+
 public class Person {
+
+    private int id;
     private String name;
     private int age;
     private String address;
@@ -64,5 +69,18 @@ public class Person {
     }
 
     public Person() {
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", address='" + address + '\'' +
+                ", username=" + username +
+                ", width=" + width +
+                ", length=" + length +
+                '}';
     }
 }

@@ -9,13 +9,14 @@ public class Driver extends Person {
     public int getId() {
         return id;
     }
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     Car car = new Car();
     private int balance;
     private Trip_status tripStatue;
     private int Width;
     private int Length;
     private PaymentType paymentType;
+
 
     public PaymentType getPaymentType() {
         return paymentType;
@@ -40,6 +41,7 @@ public class Driver extends Person {
     public void setLength(int length) {
         Length = length;
     }
+
 
 
 
